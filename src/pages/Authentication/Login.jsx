@@ -13,7 +13,7 @@ function Login() {
         <h4 className="text-center">Login</h4>
         <Auth />
         <div className="signup-btn text-center" id="showSignupBtn">
-          <Link to="/signup">Donot have an Account? Sign Up Here</Link>
+          <Link to="/signup">Do not have an Account? Sign Up Here</Link>
         </div>
       </div>
     </div>
