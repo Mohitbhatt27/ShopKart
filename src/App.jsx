@@ -1,13 +1,11 @@
 import './App.css'
-import Button from './components/Button'
+import Header from './components/Header/Header'
+
 
 function App() {
   return (
     <>
-      <div>
-        <h1>ShopKart</h1>
-        <Button />
-      </div>
+      <Header color="light" light={true} expand="md" container="md" fixed="top" />
     </>
   )
 }
