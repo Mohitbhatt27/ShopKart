@@ -1,18 +1,20 @@
-import './App.css'
-import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
-
+import "./App.css";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import MainRoutes from './routes/MainRoutes'
 
 function App() {
   return (
     <div className="app-wrapper">
-      <Header color="light" light={true} expand="md" container="md"/>
-      <div>
-        Some content
-      </div>
-      <Footer/>
+      {/* Common header for all pages */}
+      <Header color="light" light={true} expand="md" container="md" />
+
+      <MainRoutes />
+
+      {/* Common footer for all pages */}
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
