@@ -1,21 +1,11 @@
 // CSS imports
-import axios from "axios";
-import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import "./Home.css";
-import { getAllCategories } from "../../apis/fakeStoreProdApis";
-import { useEffect, useState } from "react";
+import CategoryItem from "../../components/CategoryItem/CategoryItem";
+
+import { useCategory } from "../../hooks/useCategory";
 
 function Home() {
-  const [categories, setCategories] = useState(null);
-
-  async function downloadCategories() {
-    const response = await axios.get(getAllCategories());
-    setCategories(response.data);
-  }
-
-  useEffect(() => {
-    downloadCategories();
-  }, []);
+  const { categories } = useCategory();
 
   return (
     <div className="container welcome-wrapper">
