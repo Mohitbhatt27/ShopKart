@@ -45,6 +45,7 @@ function ProductList() {
                   productImage={product.image}
                   name={product.title}
                   price={product.price}
+                  productID={product.id}
                   key={product.id}
                 />
               ))}
