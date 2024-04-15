@@ -2,8 +2,26 @@
 import { Link } from "react-router-dom";
 import Auth from "../../components/Auth/Auth";
 import "./Auth.css";
+import axios from "axios";
+import { signin } from "../../apis/fakeStoreProdApis";
+import { useRef } from "react";
 
 function Login() {
+  const authRef = useRef(null);
+
+  async function onAuthFormSubmit(formDetails) {
+    try {
+      await axios.post(signin(), {
+        username: formDetails.username,
+        email: formDetails.email,
+        password: formDetails.password,
+      });
+    } catch (error) {
+      authRef.current.resetFormData();
+      console.log(error);
+    }
+  }
+
   return (
     <div className="container">
       <div className="row">
@@ -11,7 +29,7 @@ function Login() {
       </div>
       <div className="login-wrapper" id="loginForm">
         <h4 className="text-center">Login</h4>
-        <Auth />
+        <Auth onSubmit={onAuthFormSubmit} ref={authRef} />
         <div className="signup-btn text-center" id="showSignupBtn">
           <Link to="/signup">Do not have an Account? Sign Up Here</Link>
         </div>
