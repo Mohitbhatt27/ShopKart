@@ -3,15 +3,12 @@ import Auth from "../../components/Auth/Auth";
 import "./Auth.css";
 import axios from "axios";
 import { signup } from "../../apis/fakeStoreProdApis";
-import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 function Signup() {
   const navigate = useNavigate();
-  const [resetSignUpForm, setResetSignUpForm] = useState(false);
 
-  const notifyError = () =>
+  const notifyError = () => {
     toast.error("Something went wrong!", {
       position: "top-right",
       autoClose: 5000,
@@ -22,6 +19,7 @@ function Signup() {
       progress: undefined,
       theme: "light",
     });
+  };
 
   const notifySuccess = () =>
     toast.success("Account created successfully!", {
@@ -35,19 +33,20 @@ function Signup() {
       theme: "light",
     });
 
-  async function onAuthFormSubmit(authArguments) {
+  async function onAuthFormSubmit(authArguments, resetForm) {
     try {
       await axios.post(signup(), {
         username: authArguments.username,
         email: authArguments.email,
         password: authArguments.password,
       });
+
       notifySuccess();
       navigate("/signin");
     } catch (error) {
       console.log(error);
       notifyError();
-      setResetSignUpForm(true);
+      resetForm();
     }
   }
 
@@ -58,7 +57,7 @@ function Signup() {
       </div>
       <div className="login-wrapper" id="loginForm">
         <h4 className="text-center">Signup</h4>
-        <Auth onSubmit={onAuthFormSubmit} resetForm={resetSignUpForm} />
+        <Auth onSubmit={onAuthFormSubmit} />
         <div className="signup-btn text-center" id="showSignupBtn">
           <Link to="/signin">Already have an Account? Sign In Here</Link>
         </div>

@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 
-function Auth({ onSubmit, resetForm }) {
+function Auth({ onSubmit }) {
   const [formDetails, setFormDetails] = useState({
     email: "",
     password: "",
     username: "",
     isLoading: false,
   });
-
-  function updateUsername(updatedUsername) {
-    setFormDetails({ ...formDetails, username: updatedUsername });
-  }
 
   function updateEmail(updatedEmail) {
     setFormDetails({ ...formDetails, email: updatedEmail });
@@ -20,52 +16,61 @@ function Auth({ onSubmit, resetForm }) {
     setFormDetails({ ...formDetails, password: updatedPassword });
   }
 
+  function updateUsername(updateUsername) {
+    setFormDetails({ ...formDetails, username: updateUsername });
+  }
+
   function onFormSubmit() {
     setFormDetails({ ...formDetails, isLoading: true });
-    onSubmit(formDetails);
+    onSubmit(formDetails, resetForm);
+  }
+
+  function resetForm() {
+    setFormDetails({ email: "", password: "", username: "", isLoading: false });
   }
 
   useEffect(() => {
     setFormDetails({ email: "", password: "", username: "", isLoading: false });
-  }, [resetForm]);
+  }, []);
 
   return (
     <>
       <div className="input-group">
         <input
+          onChange={(e) => updateUsername(e.target.value)}
+          value={formDetails.username}
           type="text"
           className="form-control"
           placeholder="Username"
           id="loginUsername"
-          value={formDetails.username}
-          onChange={(e) => updateUsername(e.target.value)}
         />
       </div>
       <div className="input-group">
         <input
+          onChange={(e) => updateEmail(e.target.value)}
+          value={formDetails.email}
           type="email"
           className="form-control"
           placeholder="Email"
           id="loginUserEmail"
-          value={formDetails.email}
-          onChange={(e) => updateEmail(e.target.value)}
         />
       </div>
       <div className="input-group">
         <input
+          onChange={(e) => updatePassword(e.target.value)}
+          value={formDetails.password}
           type="password"
           className="form-control"
           placeholder="Password"
           id="loginPassword"
-          value={formDetails.password}
-          onChange={(e) => updatePassword(e.target.value)}
         />
       </div>
+
       <div className="input-group">
         <button
+          onClick={onFormSubmit}
           className="form-control btn btn-primary"
           type="button"
-          onClick={onFormSubmit}
           disabled={formDetails.isLoading}
         >
           {formDetails.isLoading && (
