@@ -32,12 +32,9 @@ function Auth({ onSubmit }, ref) {
   useImperativeHandle(
     ref,
     () => {
-      setFormDetails({
-        email: "",
-        password: "",
-        username: "",
-        isLoading: false,
-      });
+      return {
+        resetFormData: resetForm,
+      };
     },
     []
   );

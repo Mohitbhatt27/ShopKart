@@ -5,9 +5,36 @@ import "./Auth.css";
 import axios from "axios";
 import { signin } from "../../apis/fakeStoreProdApis";
 import { useRef } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const authRef = useRef(null);
+
+  const notifyError = () => {
+    toast.error("Something went wrong!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const notifySuccess = () =>
+    toast.success("Account created successfully!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
 
   async function onAuthFormSubmit(formDetails) {
     try {
@@ -16,7 +43,9 @@ function Login() {
         email: formDetails.email,
         password: formDetails.password,
       });
+      notifySuccess();
     } catch (error) {
+      notifyError();
       authRef.current.resetFormData();
       console.log(error);
     }
