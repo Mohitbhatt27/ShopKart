@@ -8,6 +8,7 @@ import { useRef } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCookies } from "react-cookie";
+import jwt_decode from "jwt-decode";
 
 function Login() {
   const authRef = useRef(null);
@@ -47,7 +48,8 @@ function Login() {
         password: formDetails.password,
       });
       notifySuccess();
-      setToken("jwt-token", response.data.token);
+      const tokenDetails = jwt_decode(response.data.token);
+      setToken("jwt-token", response.data.token, { httpOnly: true });
       navigate("/");
     } catch (error) {
       notifyError();
