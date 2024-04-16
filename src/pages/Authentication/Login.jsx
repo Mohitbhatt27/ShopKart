@@ -1,5 +1,5 @@
 // CSS imports
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Auth from "../../components/Auth/Auth";
 import "./Auth.css";
 import axios from "axios";
@@ -7,9 +7,12 @@ import { signin } from "../../apis/fakeStoreProdApis";
 import { useRef } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCookies } from "react-cookie";
 
 function Login() {
   const authRef = useRef(null);
+  const navigate = useNavigate();
+  const [token, setToken] = useCookies(["jwt-token"]);
 
   const notifyError = () => {
     toast.error("Something went wrong!", {
@@ -38,12 +41,14 @@ function Login() {
 
   async function onAuthFormSubmit(formDetails) {
     try {
-      await axios.post(signin(), {
+      const response = await axios.post(signin(), {
         username: formDetails.username,
         email: formDetails.email,
         password: formDetails.password,
       });
       notifySuccess();
+      setToken("jwt-token", response.data.token);
+      navigate("/");
     } catch (error) {
       notifyError();
       authRef.current.resetFormData();
