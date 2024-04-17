@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// library import
+import { useContext, useEffect, useState } from "react";
 import {
   Collapse,
   Navbar,
@@ -13,17 +12,30 @@ import {
   DropdownItem,
   NavbarText,
 } from "reactstrap";
-
+import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import axios from "axios";
 // CSS import
 import "./Header.css";
+// Context import
+import UserContext from "../../context/UserContext";
 
 function Header(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [token, setToken, removeToken] = useCookies(["jwt-token"]);
-
+  const { user, setUser } = useContext(UserContext);
   const toggle = () => setIsOpen(!isOpen);
 
+  function logout() {
+    removeToken("jwt-token", { httpOnly: true });
+    axios.get(`${import.meta.env.VITE_FAKE_STORE_URL}/logout`, {
+      withCredentials: true,
+    });
+    setUser(null);
+  }
+
   useEffect(() => {
+    console.log("user", user);
   }, [token]);
 
   return (
@@ -39,7 +51,7 @@ function Header(props) {
               <DropdownToggle nav caret>
                 Options
               </DropdownToggle>
-              <DropdownMenu end>
+              <DropdownMenu right>
                 <DropdownItem>Cart</DropdownItem>
                 <DropdownItem>Settings</DropdownItem>
                 <DropdownItem divider />
@@ -47,8 +59,7 @@ function Header(props) {
                   {token["jwt-token"] ? (
                     <Link
                       onClick={() => {
-                        console.log(token);
-                        removeToken("jwt-token");
+                        logout();
                       }}
                       to="/signin"
                     >
@@ -60,7 +71,7 @@ function Header(props) {
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-            <NavbarText>Username</NavbarText>
+            {user && <NavbarText>{user.username}</NavbarText>}
           </Nav>
         </Collapse>
       </Navbar>

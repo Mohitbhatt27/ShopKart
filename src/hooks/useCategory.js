@@ -6,7 +6,7 @@ export function useCategory() {
   const [categories, setCategories] = useState(null);
 
   async function downloadAllCategories() {
-    const response = await axios.get(getAllCategories());
+    const response = await axios.get(getAllCategories(),{withCredentials: true});
     setCategories(response.data);
   }
 

@@ -1,21 +1,49 @@
+// CSS imports
 import "./App.css";
-import Header from "./components/Header/Header";
+// library imports
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
+// Custom components
 import Footer from "./components/Footer/Footer";
-import MainRoutes from './routes/MainRoutes'
-import { ToastContainer } from 'react-toastify';
+import Header from "./components/Header/Header";
+import MainRoutes from "./routes/MainRoutes";
+// context import
+import UserContext from "./context/UserContext";
 
 function App() {
-  return (
-    
-    <div className="app-wrapper">
-      {/* Common header for all pages */}
-      <ToastContainer/>
-      <Header color="light" light={true} expand="md" container="md" />
-      <MainRoutes />
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useCookies(["jwt-token"]);
 
-      {/* Common footer for all pages */}
-      <Footer />
-    </div>
+  function accessToken() {
+    axios
+      .get(`${import.meta.env.VITE_FAKE_STORE_URL}/accesstoken`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setToken("jwt-token", res.data.token, { httpOnly: true });
+        const tokenDetails = jwtDecode(res.data.token);
+        setUser({ username: tokenDetails.user, id: tokenDetails.id });
+      });
+  }
+
+  useEffect(() => {
+    accessToken();
+  }, []);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      <div className="app-wrapper">
+        {/* Common header for all pages */}
+        <Header color="light" light={true} expand="md" container="md" />
+
+        <MainRoutes />
+
+        {/* Common footer for all pages */}
+        <Footer />
+      </div>
+    </UserContext.Provider>
   );
 }
 
